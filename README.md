@@ -1,2 +1,2 @@
 # scatter-plot
-[netlify]([url](https://scatter-plot.netlify.app/))
+[netlify](https://scatter-plot.netlify.app/)
