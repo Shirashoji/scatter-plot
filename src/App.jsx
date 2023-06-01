@@ -21,25 +21,18 @@ function App() {
   const [hor, setHor] = React.useState(options[0]);
   const [vert, setVert] = React.useState(options[1]);
 
-  // useEffect(() => {
-  //   console.log(hvalue);
-  //   console.log(vvalue);
-  // });
-
   const [iris, setIris] = useState([]);
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchIris().then((iris) => {
       setIris(iris);
-      console.log(iris);
     });
   }, []);
 
   useEffect(() => {
     if (iris) {
       setData(convertData(iris));
-      // console.log(data);
     }
   }, [iris]);
 

@@ -9,6 +9,13 @@ function Scatter(props) {
 
   const width = 400;
   const height = 400;
+  const scheme = d3.scaleOrdinal(d3.schemeCategory10);
+  const [visibleData, setVisible] = useState([]);
+
+  useEffect(() => {
+    setVisible(data.map((item) => item.id));
+    console.log(visibleData);
+  }, [data]);
 
   const allData = data.map((item) => item.data).flat();
 
@@ -76,7 +83,6 @@ function Scatter(props) {
         <g transform={`translate(0, 0)`}>
           <path d={line.toString()} stroke="black" fill="none" />
           {y.ticks().map((d, i) => {
-            // console.log(height - y(d));
             const mline = d3.path();
             mline.moveTo(0, 0);
             mline.lineTo(-10, 0);
@@ -110,7 +116,7 @@ function Scatter(props) {
 
   const plotPoint = (data, color) => {
     return data.map((d, i) => {
-      console.log(d);
+      // console.log(d);
       return (
         <>
           <g transform={`translate(${x(d[h])}, ${y(d[v])})`}>
@@ -125,7 +131,6 @@ function Scatter(props) {
   };
 
   const plotData = (data) => {
-    const scheme = d3.scaleOrdinal(d3.schemeCategory10);
     return data.map((d, i) => {
       return <>{plotPoint(d.data, scheme(i))}</>;
     });
