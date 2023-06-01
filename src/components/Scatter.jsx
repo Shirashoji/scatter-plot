@@ -42,13 +42,14 @@ function Scatter(props) {
           <path d={line.toString()} stroke="black" fill="none" />
           {x.ticks().map((d, i) => {
             // console.log(x(d));
-            const mline = d3.path();
-            mline.moveTo(0, 0);
-            mline.lineTo(0, 10);
+            // const mline = d3.path();
+            // mline.moveTo(0, 0);
+            // mline.lineTo(0, 10);
             return (
               <>
                 <g transform={`translate(${x(d)}, 0)`}>
-                  <path d={mline.toString()} stroke="black" fill="none" />
+                  {/* <path d={mline.toString()} stroke="black" fill="none" /> */}
+                  <line x1="0" y1="0" x2="0" y2="10" stroke="black" />
                   <text
                     x={0}
                     y={20}
@@ -83,13 +84,14 @@ function Scatter(props) {
         <g transform={`translate(0, 0)`}>
           <path d={line.toString()} stroke="black" fill="none" />
           {y.ticks().map((d, i) => {
-            const mline = d3.path();
-            mline.moveTo(0, 0);
-            mline.lineTo(-10, 0);
+            // const mline = d3.path();
+            // mline.moveTo(0, 0);
+            // mline.lineTo(-10, 0);
             return (
               <>
                 <g transform={`translate(0, ${y(d)})`}>
-                  <path d={mline.toString()} stroke="black" fill="none" />
+                  {/* <path d={mline.toString()} stroke="black" fill="none" /> */}
+                  <line x1="0" y1="0" x2="-10" y2="0" stroke="black" />
                   <text
                     x={-15}
                     y={0}
