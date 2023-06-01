@@ -1,5 +1,5 @@
-export function convertData(input) {
-  const species = [...new Set(input.map((e) => e.species))];
+export function convertData(input, category) {
+  const species = [...new Set(input.map((e) => e[category]))];
   // console.log(species);
   const ans = species.map((specie) => {
     return {
