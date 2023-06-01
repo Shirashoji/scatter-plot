@@ -1,7 +1,6 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 export default function Selections(props) {
   const options = props.options;
@@ -9,7 +8,7 @@ export default function Selections(props) {
   const setValue = props.setValue;
   const value = props.value;
 
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState("");
 
   return (
     <div>

@@ -6,8 +6,13 @@ export function convertData(input) {
       id: specie,
       data: input
         .filter((item) => item.species === specie)
-        .map(({ sepalLength, sepalWidth, petalLength, petalWidth }) => ({ sepalLength, sepalWidth, petalLength, petalWidth })),
+        .map(({ sepalLength, sepalWidth, petalLength, petalWidth }) => ({
+          sepalLength,
+          sepalWidth,
+          petalLength,
+          petalWidth,
+        })),
     };
   });
   return ans;
-};
+}
