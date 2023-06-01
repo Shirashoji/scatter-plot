@@ -28,7 +28,7 @@ function Scatter(props) {
   const y = d3
     .scaleLinear()
     .domain(d3.extent(allData, (item) => item[v]))
-    .range([0, height])
+    .range([height, 0])
     .nice();
 
   const hor = () => {
@@ -88,7 +88,7 @@ function Scatter(props) {
             mline.lineTo(-10, 0);
             return (
               <>
-                <g transform={`translate(0, ${height - y(d)})`}>
+                <g transform={`translate(0, ${y(d)})`}>
                   <path d={mline.toString()} stroke="black" fill="none" />
                   <text
                     x={-15}
@@ -158,9 +158,7 @@ function Scatter(props) {
         <g transform={`translate(100, 100)`}>
           {hor()}
           {vert()}
-          <g transform={`translate(0, ${height})scale(1,-1)`}>
-            {plotData(data)}
-          </g>
+          {plotData(data)}
           <g transform={`translate(${width + 20}, 0)`}>
             {createLegend(visibleData)}
           </g>

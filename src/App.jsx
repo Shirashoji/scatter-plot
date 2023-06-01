@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     if (iris) {
-      setData(convertData(iris));
+      setData(convertData(iris, "species"));
     }
   }, [iris]);
 
