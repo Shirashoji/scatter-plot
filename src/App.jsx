@@ -17,8 +17,9 @@ import { convertData } from './api/convertData';
 
 function App() {
   const options = ['sepalLength', 'sepalWidth', 'petalLength', 'petalWidth'];
-  const [hvalue, hsetValue] = React.useState(options[0]);
-  const [vvalue, vsetValue] = React.useState(options[1]);
+
+  const [hor, setHor] = React.useState(options[0]);
+  const [vert, setVert] = React.useState(options[1]);
 
   // useEffect(() => {
   //   console.log(hvalue);
@@ -26,7 +27,7 @@ function App() {
   // });
 
   const [iris, setIris] = useState([]);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchIris().then((iris) => {
@@ -52,12 +53,12 @@ function App() {
           <Grid item xs="auto">
             <header className="App-header">
               <h1>Scatter Plot of Iris Flower Dataset</h1>
-              <Selections options={options} value={hvalue} setValue={hsetValue} label="Horizontal Axis" />
-              <Selections options={options} value={vvalue} setValue={vsetValue} label="Vertical Axis" />
+              <Selections options={options} value={hor} setValue={setHor} label="Horizontal Axis" />
+              <Selections options={options} value={vert} setValue={setVert} label="Vertical Axis" />
             </header>
           </Grid>
           <Grid item xs="auto">
-            <Scatter h={hvalue} v={vvalue} data={iris}/>
+            <Scatter h={hor} v={vert} data={data} />
           </Grid>
         </Stack>
       </Box>

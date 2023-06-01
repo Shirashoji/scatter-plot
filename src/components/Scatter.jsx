@@ -7,27 +7,22 @@ function Scatter(props) {
     const v = props.v;
     const h = props.h;
     const data = props.data;
-    console.log(h);
 
     const width = 400;
     const height = 400;
 
-    // const data = [
-    //     { name: "A", color: "orange", value: 250 },
-    //     { name: "B", color: "purple", value: 200 },
-    //     { name: "C", color: "pink", value: 100 },
-    //     // {name: "C", color: "pink", value: 100},
-    //     // {name: "C", color: "pink", value: 100},
-    // ]
+    // console.log(data);
+
+    const allData = data.map((item) => item.data).flat();
 
     const x = d3.scaleLinear()
-        .domain(d3.extent(data, (item) => item[h]))
+        .domain(d3.extent(allData, (item) => item[h]))
         .range([0, width]).nice();
 
-    console.log(x.ticks());
+    // console.log(x.ticks());
 
     const y = d3.scaleLinear()
-        .domain(d3.extent(data, (item) => item[v]))
+        .domain(d3.extent(allData, (item) => item[v]))
         .range([0, height]).nice();
 
     const hor = () => {
@@ -40,7 +35,7 @@ function Scatter(props) {
                 <g transform={`translate(0, ${height})`}>
                     <path d={line.toString()} stroke="black" fill="none" />
                     {x.ticks().map((d, i) => {
-                        console.log(x(d));
+                        // console.log(x(d));
                         const mline = d3.path();
                         mline.moveTo(0, 0);
                         mline.lineTo(0, 10);
@@ -68,7 +63,7 @@ function Scatter(props) {
                 <g transform={`translate(0, 0)`}>
                     <path d={line.toString()} stroke="black" fill="none" />
                     {y.ticks().map((d, i) => {
-                        console.log(height - y(d));
+                        // console.log(height - y(d));
                         const mline = d3.path();
                         mline.moveTo(0, 0);
                         mline.lineTo(-10, 0);
@@ -87,6 +82,32 @@ function Scatter(props) {
         );
     }
 
+    const plotPoint = (data, color) => {
+        data.map((d, i) => {
+            console.log(d);
+            return (
+                <>
+                    <g transform={`translate(${x(d[h])}, ${y(d[v])})`}>
+                        <circle r={5} fill={color} />
+                        <text x={10} y={5} textAnchor="start" dominantBaseline="central">{d.name}</text>
+                    </g>
+                </>
+            );
+        })
+    }
+
+    const plotData = (data) => {
+        const scheme = d3.scaleOrdinal(d3.schemeSet1);
+        data.map((d, i) => {
+            return (
+                <>
+                    {plotPoint(d.data, "red")}
+                </>
+            );
+        })
+    }
+
+
     return (
         <>
             <h1></h1>
@@ -95,17 +116,7 @@ function Scatter(props) {
                     {hor()}
                     {vert()}
                     <g transform={`translate(0, ${height})scale(1,-1)`}>
-                        {data.map((d, i) => {
-                            return (
-                                <>
-                                    <g transform={`translate(${x(d[h])}, ${y(d[v])})`}>
-                                        <circle r={5} fill={d.color} />
-                                        <text x={10} y={5} textAnchor="start" dominantBaseline="central">{d.name}</text>
-                                    </g>
-                                </>
-                            );
-                        })
-                        }
+                        {plotData(data)}
                     </g>
                 </g>
             </svg >
