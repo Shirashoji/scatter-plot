@@ -11,15 +11,11 @@ function Scatter(props) {
     const width = 400;
     const height = 400;
 
-    // console.log(data);
-
     const allData = data.map((item) => item.data).flat();
 
     const x = d3.scaleLinear()
         .domain(d3.extent(allData, (item) => item[h]))
         .range([0, width]).nice();
-
-    // console.log(x.ticks());
 
     const y = d3.scaleLinear()
         .domain(d3.extent(allData, (item) => item[v]))
@@ -83,7 +79,7 @@ function Scatter(props) {
     }
 
     const plotPoint = (data, color) => {
-        data.map((d, i) => {
+        return data.map((d, i) => {
             console.log(d);
             return (
                 <>
@@ -97,11 +93,11 @@ function Scatter(props) {
     }
 
     const plotData = (data) => {
-        const scheme = d3.scaleOrdinal(d3.schemeSet1);
-        data.map((d, i) => {
+        const scheme = d3.scaleOrdinal(d3.schemeCategory10);
+        return data.map((d, i) => {
             return (
                 <>
-                    {plotPoint(d.data, "red")}
+                    {plotPoint(d.data, scheme(i))}
                 </>
             );
         })
