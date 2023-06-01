@@ -136,15 +136,33 @@ function Scatter(props) {
     });
   };
 
+  const createLegend = (data) => {
+    return data.map((d, i) => {
+      return (
+        <>
+          <g transform={`translate(0, ${i * 30})`}>
+            <rect width={10} height={10} fill={scheme(i)} />
+            <text x={15} y={10} textAnchor="start" dominantBaseline="auto">
+              {d}
+            </text>
+          </g>
+        </>
+      );
+    });
+  };
+
   return (
     <>
       <h1></h1>
-      <svg width={560} height={560}>
+      <svg width={800} height={800}>
         <g transform={`translate(100, 100)`}>
           {hor()}
           {vert()}
           <g transform={`translate(0, ${height})scale(1,-1)`}>
             {plotData(data)}
+          </g>
+          <g transform={`translate(${width + 20}, 0)`}>
+            {createLegend(visibleData)}
           </g>
         </g>
       </svg>
