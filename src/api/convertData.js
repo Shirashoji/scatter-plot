@@ -1,16 +1,14 @@
 export function convertData(input, category) {
   const categories = [...new Set(input.map((e) => e[category]))];
-  const ans = categories.map((specie) => {
+  const ans = categories.map((key) => {
     return {
-      id: specie,
+      id: key,
       data: input
-        .filter((item) => item.species === specie)
-        .map(({ sepalLength, sepalWidth, petalLength, petalWidth }) => ({
-          sepalLength,
-          sepalWidth,
-          petalLength,
-          petalWidth,
-        })),
+        .filter((item) => item[category] === key)
+        .map((item) => {
+          delete item[category];
+          return item;
+        }),
     };
   });
   return ans;
