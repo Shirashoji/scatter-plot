@@ -32,7 +32,7 @@ function App() {
       mode: prefersDarkMode ? "dark" : "light",
     },
   });
-  
+
   useEffect(() => {
     fetchIris().then((iris) => {
       setIris(iris);
@@ -49,7 +49,7 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <div className="App">
         <Box>
-          <Stack sx={{ flexGrow: 1 }} direction="row" spacing={2}>
+          <Grid container spacing={10}>
             <Grid item xs="auto">
               <header className="App-header">
                 <h1>Scatter Plot of Iris Flower Dataset</h1>
@@ -70,7 +70,7 @@ function App() {
             <Grid item xs="auto">
               <Scatter h={hor} v={vert} data={data} />
             </Grid>
-          </Stack>
+          </Grid>
         </Box>
       </div>
     </ThemeProvider>

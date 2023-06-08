@@ -10,11 +10,11 @@ function Scatter(props) {
 
   const width = 400;
   const height = 400;
-  const margin = 100;
+  const margin = 60;
   const scheme = d3.scaleOrdinal(d3.schemeCategory10);
   const categories = data.map((item) => item.id);
   categories.map((item) => scheme(item));
-  const [visibleData, setVisible] = useState(new Set());
+  const [visibleData, setVisible] = useState([]);
 
   const [infocol, setColor] = useState(scheme);
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -23,18 +23,18 @@ function Scatter(props) {
   }, [prefersDarkMode]);
 
   useEffect(() => {
-    setVisible(new Set(data.map((item) => item.id)));
+    setVisible(data.map((item) => item.id));
   }, [data]);
 
   const allData = data.map((item) => item.data).flat();
 
-  const x = d3
+  const xScale = d3
     .scaleLinear()
     .domain(d3.extent(allData, (item) => item[h]))
     .range([0, width])
     .nice();
 
-  const y = d3
+  const yScale = d3
     .scaleLinear()
     .domain(d3.extent(allData, (item) => item[v]))
     .range([height, 0])
@@ -44,9 +44,9 @@ function Scatter(props) {
     return (
       <g transform={`translate(0, ${height})`}>
         <line x1="0" y1="0" x2={width} y2="0" stroke={infocol} />
-        {x.ticks().map((d, i) => {
+        {xScale.ticks().map((d, i) => {
           return (
-            <g key={i} transform={`translate(${x(d)}, 0)`}>
+            <g key={i} transform={`translate(${xScale(d)}, 0)`}>
               <line x1="0" y1="0" x2="0" y2="10" stroke={infocol} />
               <text
                 x={0}
@@ -77,9 +77,9 @@ function Scatter(props) {
     return (
       <g>
         <line x1="0" y1="0" x2="0" y2={height} stroke={infocol} />
-        {y.ticks().map((d, i) => {
+        {yScale.ticks().map((d, i) => {
           return (
-            <g transform={`translate(0, ${y(d)})`} key={d}>
+            <g transform={`translate(0, ${yScale(d)})`} key={d}>
               <line x1="0" y1="0" x2="-10" y2="0" stroke={infocol} />
               <text
                 x={-15}
@@ -110,8 +110,8 @@ function Scatter(props) {
       return (
         <circle
           r={5}
-          cx={x(d[h])}
-          cy={y(d[v])}
+          cx={xScale(d[h])}
+          cy={yScale(d[v])}
           fill={color}
           key={`${spd.id}-${i}`}
           style={{
@@ -125,7 +125,7 @@ function Scatter(props) {
 
   const plotData = (data) => {
     return data.map((d, i) => {
-      if (visibleData.has(d.id)) {
+      if (visibleData.includes(d.id)) {
         return <g key={i}> {plotPoint(d, scheme(d.id))}</g>;
       } else {
         return <g key={i}></g>;
@@ -142,7 +142,7 @@ function Scatter(props) {
         } else {
           newVisible.add(d);
         }
-        setVisible(newVisible);
+        setVisible([...newVisible]);
       };
       return (
         <g
@@ -168,7 +168,7 @@ function Scatter(props) {
 
   return (
     <>
-      <svg width={800} height={800}>
+      <svg width={700} height={550}>
         <g transform={`translate(${margin}, ${margin})`}>
           {hor()}
           {vert()}

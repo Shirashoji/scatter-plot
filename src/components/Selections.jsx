@@ -22,7 +22,7 @@ export default function Selections(props) {
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        id="controllable-states-demo"
+        id={props.label}
         options={options}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label={props.label} />}
