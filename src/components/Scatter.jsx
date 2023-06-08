@@ -9,12 +9,14 @@ function Scatter(props) {
 
   const width = 400;
   const height = 400;
+  const margin = 100;
   const scheme = d3.scaleOrdinal(d3.schemeCategory10);
-  const [visibleData, setVisible] = useState([]);
+  const categories = data.map((item) => item.id);
+  categories.map((item) => scheme(item));
+  const [visibleData, setVisible] = useState(new Set());
 
   useEffect(() => {
-    setVisible(data.map((item) => item.id));
-    console.log(visibleData);
+    setVisible(new Set(data.map((item) => item.id)));
   }, [data]);
 
   const allData = data.map((item) => item.data).flat();
@@ -32,123 +34,106 @@ function Scatter(props) {
     .nice();
 
   const hor = () => {
-    const line = d3.path();
-    line.moveTo(0, 0);
-    line.lineTo(width, 0);
-    line.moveTo(0, 0);
     return (
-      <>
-        <g transform={`translate(0, ${height})`}>
-          <path d={line.toString()} stroke="black" fill="none" />
-          {x.ticks().map((d, i) => {
-            // console.log(x(d));
-            // const mline = d3.path();
-            // mline.moveTo(0, 0);
-            // mline.lineTo(0, 10);
-            return (
-              <>
-                <g transform={`translate(${x(d)}, 0)`}>
-                  {/* <path d={mline.toString()} stroke="black" fill="none" /> */}
-                  <line x1="0" y1="0" x2="0" y2="10" stroke="black" />
-                  <text
-                    x={0}
-                    y={20}
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                  >
-                    {d}
-                  </text>
-                </g>
-              </>
-            );
-          })}
-          <text
-            x={width / 2}
-            y={40}
-            textAnchor="middle"
-            dominantBaseline="central"
-          >
-            {h}
-          </text>
-        </g>
-      </>
+      <g transform={`translate(0, ${height})`}>
+        <line x1="0" y1="0" x2={width} y2="0" stroke="black" />
+        {x.ticks().map((d, i) => {
+          return (
+            <g key={i} transform={`translate(${x(d)}, 0)`}>
+              <line x1="0" y1="0" x2="0" y2="10" stroke="black" />
+              <text x={0} y={20} textAnchor="middle" dominantBaseline="central">
+                {d}
+              </text>
+            </g>
+          );
+        })}
+        <text
+          x={width / 2}
+          y={40}
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
+          {h}
+        </text>
+      </g>
     );
   };
 
   const vert = () => {
-    const line = d3.path();
-    line.moveTo(0, 0);
-    line.lineTo(0, height);
     return (
-      <>
-        <g transform={`translate(0, 0)`}>
-          <path d={line.toString()} stroke="black" fill="none" />
-          {y.ticks().map((d, i) => {
-            // const mline = d3.path();
-            // mline.moveTo(0, 0);
-            // mline.lineTo(-10, 0);
-            return (
-              <>
-                <g transform={`translate(0, ${y(d)})`}>
-                  {/* <path d={mline.toString()} stroke="black" fill="none" /> */}
-                  <line x1="0" y1="0" x2="-10" y2="0" stroke="black" />
-                  <text
-                    x={-15}
-                    y={0}
-                    textAnchor="end"
-                    dominantBaseline="central"
-                  >
-                    {d}
-                  </text>
-                </g>
-              </>
-            );
-          })}
-          <text
-            transform={`translate(-50, ${height / 2})rotate(-90)`}
-            textAnchor="middle"
-            dominantBaseline="central"
-          >
-            {v}
-          </text>
-        </g>
-      </>
+      <g>
+        <line x1="0" y1="0" x2="0" y2={height} stroke="black" />
+        {y.ticks().map((d, i) => {
+          return (
+            <g transform={`translate(0, ${y(d)})`} key={d}>
+              <line x1="0" y1="0" x2="-10" y2="0" stroke="black" />
+              <text x={-15} y={0} textAnchor="end" dominantBaseline="central">
+                {d}
+              </text>
+            </g>
+          );
+        })}
+        <text
+          transform={`translate(-50, ${height / 2})rotate(-90)`}
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
+          {v}
+        </text>
+      </g>
     );
   };
 
-  const plotPoint = (data, color) => {
-    return data.map((d, i) => {
-      // console.log(d);
+  const plotPoint = (spd, color) => {
+    return spd.data.map((d, i) => {
       return (
-        <>
-          <g transform={`translate(${x(d[h])}, ${y(d[v])})`}>
-            <circle r={5} fill={color} />
-            <text x={10} y={5} textAnchor="start" dominantBaseline="central">
-              {d.name}
-            </text>
-          </g>
-        </>
+        <circle
+          r={5}
+          cx={x(d[h])}
+          cy={y(d[v])}
+          fill={color}
+          key={`${spd.id}-${i}`}
+          style={{
+            transitionDuration: "777ms",
+          }}
+        />
       );
     });
   };
 
   const plotData = (data) => {
     return data.map((d, i) => {
-      return <>{plotPoint(d.data, scheme(i))}</>;
+      if (visibleData.has(d.id)) {
+        return <g key={i}> {plotPoint(d, scheme(d.id))}</g>;
+      } else {
+        return <g key={i}></g>;
+      }
     });
   };
 
   const createLegend = (data) => {
     return data.map((d, i) => {
+      const clickLegend = () => {
+        const newVisible = new Set(visibleData);
+        if (newVisible.has(d)) {
+          newVisible.delete(d);
+        } else {
+          newVisible.add(d);
+        }
+        setVisible(newVisible);
+      };
       return (
-        <>
-          <g transform={`translate(0, ${i * 30})`}>
-            <rect width={10} height={10} fill={scheme(i)} />
-            <text x={15} y={10} textAnchor="start" dominantBaseline="auto">
-              {d}
-            </text>
-          </g>
-        </>
+        <g
+          transform={`translate(0, ${i * 30})`}
+          key={d}
+          style={{ cursor: "pointer" }}
+          onClick={clickLegend}
+        >
+          <rect width={10} height={10} fill={scheme(d)} />
+          <text x={15} y={10} textAnchor="start" dominantBaseline="auto">
+            {d}
+          </text>
+        </g>
       );
     });
   };
@@ -157,12 +142,12 @@ function Scatter(props) {
     <>
       <h1></h1>
       <svg width={800} height={800}>
-        <g transform={`translate(100, 100)`}>
+        <g transform={`translate(${margin}, ${margin})`}>
           {hor()}
           {vert()}
           {plotData(data)}
           <g transform={`translate(${width + 20}, 0)`}>
-            {createLegend(visibleData)}
+            {createLegend(categories)}
           </g>
         </g>
       </svg>

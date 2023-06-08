@@ -1,7 +1,6 @@
 export function convertData(input, category) {
-  const species = [...new Set(input.map((e) => e[category]))];
-  // console.log(species);
-  const ans = species.map((specie) => {
+  const categories = [...new Set(input.map((e) => e[category]))];
+  const ans = categories.map((specie) => {
     return {
       id: specie,
       data: input
