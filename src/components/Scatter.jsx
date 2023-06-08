@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import * as d3 from "d3";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function Scatter(props) {
   const v = props.v;
@@ -14,6 +15,12 @@ function Scatter(props) {
   const categories = data.map((item) => item.id);
   categories.map((item) => scheme(item));
   const [visibleData, setVisible] = useState(new Set());
+
+  const [infocol, setColor] = useState(scheme);
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  useEffect(() => {
+    setColor(prefersDarkMode ? "rgba(255, 255, 255, 0.87)" : "#212121");
+  }, [prefersDarkMode]);
 
   useEffect(() => {
     setVisible(new Set(data.map((item) => item.id)));
@@ -36,12 +43,18 @@ function Scatter(props) {
   const hor = () => {
     return (
       <g transform={`translate(0, ${height})`}>
-        <line x1="0" y1="0" x2={width} y2="0" stroke="black" />
+        <line x1="0" y1="0" x2={width} y2="0" stroke={infocol} />
         {x.ticks().map((d, i) => {
           return (
             <g key={i} transform={`translate(${x(d)}, 0)`}>
-              <line x1="0" y1="0" x2="0" y2="10" stroke="black" />
-              <text x={0} y={20} textAnchor="middle" dominantBaseline="central">
+              <line x1="0" y1="0" x2="0" y2="10" stroke={infocol} />
+              <text
+                x={0}
+                y={20}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill={infocol}
+              >
                 {d}
               </text>
             </g>
@@ -52,6 +65,7 @@ function Scatter(props) {
           y={40}
           textAnchor="middle"
           dominantBaseline="central"
+          fill={infocol}
         >
           {h}
         </text>
@@ -62,12 +76,18 @@ function Scatter(props) {
   const vert = () => {
     return (
       <g>
-        <line x1="0" y1="0" x2="0" y2={height} stroke="black" />
+        <line x1="0" y1="0" x2="0" y2={height} stroke={infocol} />
         {y.ticks().map((d, i) => {
           return (
             <g transform={`translate(0, ${y(d)})`} key={d}>
-              <line x1="0" y1="0" x2="-10" y2="0" stroke="black" />
-              <text x={-15} y={0} textAnchor="end" dominantBaseline="central">
+              <line x1="0" y1="0" x2="-10" y2="0" stroke={infocol} />
+              <text
+                x={-15}
+                y={0}
+                textAnchor="end"
+                dominantBaseline="central"
+                fill={infocol}
+              >
                 {d}
               </text>
             </g>
@@ -77,6 +97,7 @@ function Scatter(props) {
           transform={`translate(-50, ${height / 2})rotate(-90)`}
           textAnchor="middle"
           dominantBaseline="central"
+          fill={infocol}
         >
           {v}
         </text>
@@ -94,6 +115,7 @@ function Scatter(props) {
           fill={color}
           key={`${spd.id}-${i}`}
           style={{
+            animationTimingFunction: "ease-in-out",
             transitionDuration: "777ms",
           }}
         />
@@ -130,7 +152,13 @@ function Scatter(props) {
           onClick={clickLegend}
         >
           <rect width={10} height={10} fill={scheme(d)} />
-          <text x={15} y={10} textAnchor="start" dominantBaseline="auto">
+          <text
+            x={15}
+            y={10}
+            textAnchor="start"
+            dominantBaseline="auto"
+            fill={infocol}
+          >
             {d}
           </text>
         </g>
@@ -140,7 +168,6 @@ function Scatter(props) {
 
   return (
     <>
-      <h1></h1>
       <svg width={800} height={800}>
         <g transform={`translate(${margin}, ${margin})`}>
           {hor()}

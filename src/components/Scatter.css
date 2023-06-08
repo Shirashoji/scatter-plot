@@ -1,0 +1,10 @@
+path {
+      fill: #212121;
+}
+
+@media (prefers-color-scheme: dark) {
+path {
+    fill: white;
+    opacity: 0.5;
+    }
+}

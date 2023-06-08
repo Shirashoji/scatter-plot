@@ -1,9 +1,10 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import "./App.css";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -24,6 +25,14 @@ function App() {
   const [iris, setIris] = useState([]);
   const [data, setData] = useState([]);
 
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: prefersDarkMode ? "dark" : "light",
+    },
+  });
+  
   useEffect(() => {
     fetchIris().then((iris) => {
       setIris(iris);
@@ -37,32 +46,34 @@ function App() {
   }, [iris]);
 
   return (
-    <div className="App">
-      <Box>
-        <Stack sx={{ flexGrow: 1 }} direction="row" spacing={2}>
-          <Grid item xs="auto">
-            <header className="App-header">
-              <h1>Scatter Plot of Iris Flower Dataset</h1>
-              <Selections
-                options={options}
-                value={hor}
-                setValue={setHor}
-                label="Horizontal Axis"
-              />
-              <Selections
-                options={options}
-                value={vert}
-                setValue={setVert}
-                label="Vertical Axis"
-              />
-            </header>
-          </Grid>
-          <Grid item xs="auto">
-            <Scatter h={hor} v={vert} data={data} />
-          </Grid>
-        </Stack>
-      </Box>
-    </div>
+    <ThemeProvider theme={darkTheme}>
+      <div className="App">
+        <Box>
+          <Stack sx={{ flexGrow: 1 }} direction="row" spacing={2}>
+            <Grid item xs="auto">
+              <header className="App-header">
+                <h1>Scatter Plot of Iris Flower Dataset</h1>
+                <Selections
+                  options={options}
+                  value={hor}
+                  setValue={setHor}
+                  label="Horizontal Axis"
+                />
+                <Selections
+                  options={options}
+                  value={vert}
+                  setValue={setVert}
+                  label="Vertical Axis"
+                />
+              </header>
+            </Grid>
+            <Grid item xs="auto">
+              <Scatter h={hor} v={vert} data={data} />
+            </Grid>
+          </Stack>
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 }
 
