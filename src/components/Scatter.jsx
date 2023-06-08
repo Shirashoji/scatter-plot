@@ -168,7 +168,13 @@ function Scatter(props) {
 
   return (
     <>
-      <svg width={700} height={550}>
+      <svg
+        width={700}
+        height={550}
+        style={{
+          userSelect: "none",
+        }}
+      >
         <g transform={`translate(${margin}, ${margin})`}>
           {hor()}
           {vert()}
