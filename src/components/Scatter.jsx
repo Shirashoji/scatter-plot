@@ -16,7 +16,7 @@ function Scatter(props) {
   categories.map((item) => scheme(item));
   const [visibleData, setVisible] = useState([]);
 
-  const [infocol, setColor] = useState(scheme);
+  const [infoCol, setColor] = useState(scheme);
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   useEffect(() => {
     setColor(prefersDarkMode ? "rgba(255, 255, 255, 0.87)" : "#212121");
@@ -43,17 +43,17 @@ function Scatter(props) {
   const hor = () => {
     return (
       <g transform={`translate(0, ${height})`}>
-        <line x1="0" y1="0" x2={width} y2="0" stroke={infocol} />
+        <line x1="0" y1="0" x2={width} y2="0" stroke={infoCol} />
         {xScale.ticks().map((d, i) => {
           return (
             <g key={i} transform={`translate(${xScale(d)}, 0)`}>
-              <line x1="0" y1="0" x2="0" y2="10" stroke={infocol} />
+              <line x1="0" y1="0" x2="0" y2="10" stroke={infoCol} />
               <text
                 x={0}
                 y={20}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fill={infocol}
+                fill={infoCol}
               >
                 {d}
               </text>
@@ -65,7 +65,7 @@ function Scatter(props) {
           y={40}
           textAnchor="middle"
           dominantBaseline="central"
-          fill={infocol}
+          fill={infoCol}
         >
           {h}
         </text>
@@ -76,17 +76,17 @@ function Scatter(props) {
   const vert = () => {
     return (
       <g>
-        <line x1="0" y1="0" x2="0" y2={height} stroke={infocol} />
+        <line x1="0" y1="0" x2="0" y2={height} stroke={infoCol} />
         {yScale.ticks().map((d, i) => {
           return (
             <g transform={`translate(0, ${yScale(d)})`} key={d}>
-              <line x1="0" y1="0" x2="-10" y2="0" stroke={infocol} />
+              <line x1="0" y1="0" x2="-10" y2="0" stroke={infoCol} />
               <text
                 x={-15}
                 y={0}
                 textAnchor="end"
                 dominantBaseline="central"
-                fill={infocol}
+                fill={infoCol}
               >
                 {d}
               </text>
@@ -97,7 +97,7 @@ function Scatter(props) {
           transform={`translate(-50, ${height / 2})rotate(-90)`}
           textAnchor="middle"
           dominantBaseline="central"
-          fill={infocol}
+          fill={infoCol}
         >
           {v}
         </text>
@@ -157,7 +157,7 @@ function Scatter(props) {
             y={10}
             textAnchor="start"
             dominantBaseline="auto"
-            fill={infocol}
+            fill={infoCol}
           >
             {d}
           </text>
